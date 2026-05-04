@@ -3,111 +3,135 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💕 Nuestro Manual de Conexión</title>
+<title>💕 Manual de Convivencia y Conexión</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-/* Estilos originales preservados */
+/* AQUÍ ESTÁN TUS ESTILOS ORIGINALES */
 :root {
   --cream: #FAF6F0; --rose: #C9715A; --rose-light: #F2DDD6;
-  --burgundy: #7A2D3B; --gold: #C9963A; --text: #2C1A1A;
-  --white: #FFFFFF; --shadow: 0 4px 24px rgba(122,45,59,0.08);
+  --burgundy: #7A2D3B; --gold: #C9963A; --gold-light: #F5ECD9;
+  --sage: #6B8F71; --sage-light: #DFF0E1; --plum: #5C3D6E;
+  --plum-light: #EAE0F5; --text: #2C1A1A; --text-muted: #7A6060;
+  --white: #FFFFFF; --border: #E8DDD5; --shadow: 0 4px 24px rgba(122,45,59,0.08);
 }
-body { background-color: var(--cream); font-family: 'DM+Sans', sans-serif; color: var(--text); margin: 0; padding: 20px; }
-.container { max-width: 800px; margin: 0 auto; background: var(--white); padding: 40px; border-radius: 20px; box-shadow: var(--shadow); }
-h1 { font-family: 'Playfair Display'; color: var(--burgundy); text-align: center; }
-.section { margin-bottom: 30px; padding: 20px; border: 1px solid #eee; border-radius: 15px; }
-label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--burgundy); }
-textarea, input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; }
-button { background: var(--rose); color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; transition: 0.3s; }
-button:hover { background: var(--burgundy); }
-#status { text-align: center; margin-top: 10px; font-size: 14px; color: var(--rose); }
-.chart-container { height: 300px; margin-bottom: 20px; }
+body { background-color: var(--cream); font-family: 'DM Sans', sans-serif; color: var(--text); line-height: 1.6; margin: 0; padding: 20px; }
+.container { max-width: 900px; margin: 0 auto; background: var(--white); padding: 40px; border-radius: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+h1, h2 { font-family: 'Playfair Display', serif; color: var(--burgundy); text-align: center; margin-bottom: 30px; }
+.section { margin-bottom: 40px; padding: 25px; border-radius: 16px; border: 1px solid var(--border); transition: transform 0.3s ease; }
+.section:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.03); }
+label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--burgundy); font-size: 0.95rem; }
+textarea, input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 15px; background: var(--cream); font-family: inherit; font-size: 1rem; box-sizing: border-box; }
+.btn-save { background: var(--burgundy); color: white; border: none; padding: 18px 30px; border-radius: 14px; cursor: pointer; width: 100%; font-size: 1.1rem; font-weight: 600; letter-spacing: 0.5px; transition: 0.3s; margin-top: 20px; }
+.btn-save:hover { background: var(--rose); transform: scale(1.01); }
+.chart-container { position: relative; height: 350px; margin: 20px 0; }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>💕 Nuestro Manual de Conexión</h1>
-    <p style="text-align:center">Lo que escribas aquí se guardará para ambos en tiempo real.</p>
+  <h1>💕 Manual de Convivencia</h1>
+  
+  <div class="section">
+    <h2>Nuestra Identidad</h2>
+    <label>Nuestros Nombres</label>
+    <input type="text" id="nombres" placeholder="Ej: Sara & Carlos">
+    <label>Nuestra Fecha Especial</label>
+    <input type="text" id="fecha" placeholder="Ej: 12 de Octubre">
+  </div>
 
-    <div class="section">
-        <label>Nuestros Nombres</label>
-        <input type="text" id="nombres_pareja" placeholder="Ej: Sara y Juan">
-        
-        <label>¿Qué es lo que más te gusta de nuestra relación?</label>
-        <textarea id="lo_que_mas_gusta" rows="3"></textarea>
-    </div>
+  <div class="section">
+    <h2>Niveles de Energía / Ánimo</h2>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Ingresa números del 1 al 10 separados por comas para ver la gráfica.</p>
+    <label>Persona 1 (Niveles)</label>
+    <input type="text" id="line_p1" placeholder="Ej: 5, 7, 8, 4, 9" oninput="updateLineChart()">
+    <label>Persona 2 (Niveles)</label>
+    <input type="text" id="line_p2" placeholder="Ej: 6, 6, 9, 3, 8" oninput="updateLineChart()">
+    <div class="chart-container"><canvas id="line-chart"></canvas></div>
+  </div>
 
-    <div class="section">
-        <label>Lenguajes del Amor (Persona 1)</label>
-        <input type="text" id="lang_p1" placeholder="Ej: Palabras de afirmación, Tiempo de calidad">
-        
-        <label>Lenguajes del Amor (Persona 2)</label>
-        <input type="text" id="lang_p2" placeholder="Ej: Actos de servicio, Regalos">
-    </div>
+  <div class="section">
+    <h2>Acuerdos y Notas</h2>
+    <label>¿Cómo resolvemos conflictos?</label>
+    <textarea id="conflictos" rows="4"></textarea>
+    <label>Cosas que nos hacen sonreír</label>
+    <textarea id="felicidad" rows="4"></textarea>
+  </div>
 
-    <div class="section">
-        <label>Acuerdos Importantes</label>
-        <textarea id="acuerdos" rows="5" placeholder="Escribe aquí nuestros compromisos..."></textarea>
-    </div>
-
-    <button onclick="saveToCloud()">✨ Guardar para Ambos</button>
-    <div id="status"></div>
+  <button class="btn-save" onclick="saveAll()">✨ Guardar para Ambos</button>
+  <p id="status" style="text-align:center; margin-top:10px; color:var(--rose); font-weight:500;"></p>
 </div>
 
 <script>
-// URL de tu Google Script
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrsWiGpq9iExHHFDsvwDM-x6hk9KysydIF7WBa8fdaajW0-jja1CbBQ3AAlAoseN2_/exec";
 
-// Función para guardar datos en Google Sheets
-async function saveToCloud() {
-    const status = document.getElementById('status');
-    status.innerText = "Guardando en la nube... ☁️";
-    
-    const data = {};
-    document.querySelectorAll('input, textarea').forEach(el => {
-        if (el.id) data[el.id] = el.value;
+// ─── LÓGICA DE LAS GRÁFICAS (Tus gráficas originales) ───
+let lineInst = null;
+function updateLineChart() {
+  const ctx = document.getElementById('line-chart');
+  if(!ctx) return;
+  const val1 = document.getElementById('line_p1').value.split(',').map(Number);
+  const val2 = document.getElementById('line_p2').value.split(',').map(Number);
+  const labels = val1.length >= val2.length ? val1.map((_,i)=>`Día ${i+1}`) : val2.map((_,i)=>`Día ${i+1}`);
+
+  if(lineInst) lineInst.destroy();
+  lineInst = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {label:'Persona 1', data:val1, borderColor:'#C9715A', backgroundColor:'rgba(201,113,90,0.1)', fill:true, tension:0.4},
+        {label:'Persona 2', data:val2, borderColor:'#5C3D6E', backgroundColor:'rgba(92,61,110,0.1)', fill:true, tension:0.4}
+      ]
+    },
+    options: {responsive:true, maintainAspectRatio:false, scales:{y:{min:0,max:10}}}
+  });
+}
+
+// ─── LÓGICA DE LA NUBE (Google Sheets) ───
+async function saveAll() {
+  const status = document.getElementById('status');
+  status.innerText = "Guardando en la nube... ☁️";
+  
+  const data = {};
+  document.querySelectorAll('input, textarea').forEach(el => {
+    if (el.id) data[el.id] = el.value;
+  });
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify(data)
     });
-
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors', 
-            body: JSON.stringify(data)
-        });
-        status.innerText = "¡Guardado con éxito! ❤️ Ambos verán esto al recargar.";
-        setTimeout(() => status.innerText = "", 5000);
-    } catch (e) {
-        console.error(e);
-        status.innerText = "Error al guardar. Inténtalo de nuevo.";
-    }
+    status.innerText = "¡Guardado con éxito! ❤️ Ambos verán esto.";
+    setTimeout(() => status.innerText = "", 4000);
+  } catch (e) {
+    status.innerText = "Error al guardar ❌";
+  }
 }
 
-// Función para cargar datos desde Google Sheets
-async function loadFromCloud() {
-    const status = document.getElementById('status');
-    status.innerText = "Cargando memorias... ✨";
-    
-    try {
-        const response = await fetch(SCRIPT_URL);
-        const data = await response.json();
-        
-        if (data) {
-            Object.keys(data).forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.value = data[id];
-            });
-            status.innerText = "Datos actualizados";
-        }
-    } catch (e) {
-        console.log("Iniciando manual nuevo o error de conexión.");
-        status.innerText = "";
+async function loadAll() {
+  const status = document.getElementById('status');
+  status.innerText = "Sincronizando datos... ✨";
+  try {
+    const response = await fetch(SCRIPT_URL);
+    const data = await response.json();
+    if (data) {
+      Object.keys(data).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = data[id];
+      });
+      updateLineChart(); // Refrescar gráfica con datos cargados
     }
+    status.innerText = "";
+  } catch (e) {
+    status.innerText = "";
+    console.log("No hay datos guardados aún.");
+  }
 }
 
-// Cargar datos automáticamente al abrir la página
-window.onload = loadFromCloud;
+window.onload = loadAll;
 </script>
 
 </body>
