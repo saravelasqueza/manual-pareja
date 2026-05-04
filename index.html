@@ -141,7 +141,11 @@ td { padding: 10px; border-bottom: 1px solid var(--border); font-size: 13px; }
     <div class="nav-item" onclick="nav('limites')"><span class="nav-icon">🚩</span> Límites</div>
     
     <div style="margin-top:auto; padding: 16px;">
-      <button class="nav-save" onclick="saveAll()">💾 Guardar todo</button>
+      <button class="nav-save" onclick="saveAll()">
+  <button class="nav-save" onclick="saveAll()" style="margin-bottom: 8px;">💾 Guardar en Navegador</button>
+  <button class="nav-save" onclick="exportarExcel()" style="background: var(--sage);">📊 Descargar para Excel</button>
+  <p class="save-indicator" id="save-status">Los datos se guardan automáticamente</p>
+</div>
       <p class="save-indicator" id="save-status">Sincronizado con la nube</p>
     </div>
   </nav>
