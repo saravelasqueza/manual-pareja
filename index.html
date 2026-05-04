@@ -8,121 +8,277 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 :root {
-  --cream: #FAF6F0; --rose: #C9715A; --rose-light: #F2DDD6;
-  --burgundy: #7A2D3B; --gold: #C9963A; --gold-light: #F5ECD9;
-  --sage: #6B8F71; --sage-light: #DFF0E1; --plum: #5C3D6E;
-  --plum-light: #EAE0F5; --text: #2C1A1A; --text-muted: #7A6060;
-  --white: #FFFFFF; --border: #E8DDD5; --shadow: 0 4px 24px rgba(122,45,59,0.08);
+  --cream: #FAF6F0;
+  --rose: #C9715A;
+  --rose-light: #F2DDD6;
+  --burgundy: #7A2D3B;
+  --gold: #C9963A;
+  --gold-light: #F5ECD9;
+  --sage: #6B8F71;
+  --sage-light: #DFF0E1;
+  --plum: #5C3D6E;
+  --plum-light: #EAE0F5;
+  --text: #2C1A1A;
+  --text-muted: #7A6060;
+  --white: #FFFFFF;
+  --border: #E8DDD5;
+  --shadow: 0 4px 24px rgba(122,45,59,0.08);
 }
-body { background-color: var(--cream); font-family: 'DM Sans', sans-serif; color: var(--text); line-height: 1.6; margin: 0; padding: 20px; }
-.container { max-width: 1000px; margin: 0 auto; background: var(--white); padding: 40px; border-radius: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); }
-header { text-align: center; margin-bottom: 50px; padding-bottom: 30px; border-bottom: 2px double var(--border); }
-h1 { font-family: 'Playfair Display', serif; color: var(--burgundy); font-size: 2.8rem; margin: 0 0 10px 0; }
-h2 { font-family: 'Playfair Display', serif; color: var(--burgundy); font-size: 1.8rem; margin-top: 0; border-left: 4px solid var(--rose); padding-left: 15px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 40px; }
-.section { background: var(--white); padding: 30px; border-radius: 20px; border: 1px solid var(--border); transition: all 0.3s ease; }
-.section:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(122,45,59,0.12); }
-label { display: block; margin-bottom: 10px; font-weight: 500; color: var(--burgundy); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; }
-textarea, input { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; background: var(--cream); font-family: inherit; font-size: 1rem; transition: 0.3s; box-sizing: border-box; }
-textarea:focus, input:focus { outline: none; border-color: var(--rose); background: var(--white); box-shadow: 0 0 0 4px var(--rose-light); }
-.chart-container { position: relative; height: 300px; margin: 20px 0; }
-.btn-save { background: var(--burgundy); color: white; border: none; padding: 20px 40px; border-radius: 16px; cursor: pointer; width: 100%; font-size: 1.2rem; font-weight: 600; letter-spacing: 1px; transition: 0.4s; margin-top: 30px; box-shadow: 0 4px 15px rgba(122,45,59,0.2); }
-.btn-save:hover { background: var(--rose); transform: scale(1.02); }
-#status-msg { text-align: center; margin-top: 15px; font-weight: 500; color: var(--rose); min-height: 24px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+}
+h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
+
+/* ─── LAYOUT ─── */
+.app { display: flex; min-height: 100vh; }
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 260px;
+  background: var(--burgundy);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+  transition: transform 0.3s;
+}
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.sidebar-logo h1 { color: #fff; font-size: 18px; line-height: 1.3; }
+.sidebar-logo p { color: rgba(255,255,255,0.55); font-size: 11px; margin-top: 4px; }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  color: rgba(255,255,255,0.65);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border-left-color: var(--gold);
+}
+.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.nav-save {
+  margin: auto 16px 16px;
+  padding: 10px;
+  background: var(--gold);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  width: calc(100% - 32px);
+  transition: background 0.2s;
+}
+.nav-save:hover { background: #b5852e; }
+.save-indicator {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  padding-bottom: 8px;
+}
+
+/* ─── MAIN ─── */
+.main { margin-left: 260px; flex: 1; padding: 40px 48px; max-width: 960px; }
+.page { display: none; animation: fadeIn 0.3s; }
+.page.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: none; } }
+
+/* ─── CARDS & FORMS (Resumido para espacio) ─── */
+.card { background: var(--white); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 20px; border: 1px solid var(--border); }
+.card-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--burgundy); margin-bottom: 16px; display: flex; gap: 8px; align-items: center; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+label { display: block; font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
+input, textarea, select { width: 100%; padding: 10px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--cream); font-family: 'DM Sans', sans-serif; }
+.person-col { background: var(--cream); border-radius: 12px; padding: 20px; }
+.person-col.p1 { border-top: 4px solid var(--rose); }
+.person-col.p2 { border-top: 4px solid var(--plum); }
+
+/* ─── PORTADA HERO ─── */
+.portada-hero { background: linear-gradient(135deg, var(--burgundy), var(--plum)); border-radius: 20px; padding: 48px; text-align: center; color: white; margin-bottom: 28px; }
+.portada-heart { font-size: 48px; display: block; margin-bottom: 10px; }
+
+/* ─── TABLE ─── */
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th { background: var(--burgundy); color: #fff; padding: 10px; text-align: left; font-size: 12px; }
+td { padding: 10px; border-bottom: 1px solid var(--border); font-size: 13px; }
+
+@media (max-width: 768px) { .sidebar { display:none; } .main { margin-left: 0; padding: 20px; } }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <header>
-    <h1>📜 Nuestro Manual de Conexión</h1>
-    <p>Un espacio vivo para entendernos, cuidarnos y crecer juntos.</p>
-  </header>
+<div class="app">
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <h1>💕 Manual de Convivencia</h1>
+      <p>Nuestra historia de amor</p>
+    </div>
+    <div class="nav-item active" onclick="nav('portada')"><span class="nav-icon">🏠</span> Portada</div>
+    <div class="nav-item" onclick="nav('perfiles')"><span class="nav-icon">🧬</span> Perfiles</div>
+    <div class="nav-item" onclick="nav('mision')"><span class="nav-icon">🎯</span> Misión</div>
+    <div class="nav-item" onclick="nav('conflictos')"><span class="nav-icon">⚡</span> Conflictos</div>
+    <div class="nav-item" onclick="nav('amor')"><span class="nav-icon">💝</span> Amor</div>
+    <div class="nav-item" onclick="nav('convivencia')"><span class="nav-icon">🏡</span> Convivencia</div>
+    <div class="nav-item" onclick="nav('limites')"><span class="nav-icon">🚩</span> Límites</div>
+    
+    <div style="margin-top:auto; padding: 16px;">
+      <button class="nav-save" onclick="saveAll()">💾 Guardar todo</button>
+      <p class="save-indicator" id="save-status">Sincronizado con la nube</p>
+    </div>
+  </nav>
 
-  <div class="grid">
-    <div class="section">
-      <h2>Nuestra Identidad</h2>
-      <label>Nosotros somos</label>
-      <input type="text" id="nosotros_nombres" placeholder="Nombres">
-      <label>Desde el día</label>
-      <input type="text" id="nosotros_fecha" placeholder="Fecha especial">
-      <label>Nuestra frase</label>
-      <textarea id="nosotros_frase" rows="2"></textarea>
+  <main class="main">
+    <div class="page active" id="page-portada">
+      <div class="portada-hero">
+        <span class="portada-heart">💕</span>
+        <h1>Manual de Convivencia y Conexión</h1>
+        <p>El reglamento oficial de nuestra historia de amor</p>
+      </div>
+      <div class="card">
+        <div class="card-title">👥 Datos de la Pareja</div>
+        <div class="grid-2">
+          <div class="person-col p1">
+            <label>Persona 1</label><input type="text" id="p1-nombre">
+            <label>Lo que más amo</label><textarea id="p1-amor"></textarea>
+          </div>
+          <div class="person-col p2">
+            <label>Persona 2</label><input type="text" id="p2-nombre">
+            <label>Lo que más amo</label><textarea id="p2-amor"></textarea>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="section">
-      <h2>Lenguajes del Amor</h2>
-      <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">Valores del 1 al 10 separados por comas: Palabras, Tiempo, Regalos, Actos, Contacto</p>
-      <label>Persona 1</label>
-      <input type="text" id="radar_p1" placeholder="Ej: 8,9,5,7,10" oninput="updateRadar()">
-      <label>Persona 2</label>
-      <input type="text" id="radar_p2" placeholder="Ej: 7,10,4,8,6" oninput="updateRadar()">
-      <div class="chart-container"><canvas id="radar-chart"></canvas></div>
-    </div>
-  </div>
-
-  <div class="grid">
-    <div class="section">
-      <h2>Termómetro de Bienestar</h2>
-      <label>Niveles de energía (semana)</label>
-      <input type="text" id="line_p1" placeholder="P1: 5,7,8,4,6" oninput="updateLine()">
-      <input type="text" id="line_p2" placeholder="P2: 6,5,9,7,8" oninput="updateLine()">
-      <div class="chart-container"><canvas id="line-chart"></canvas></div>
+    <div class="page" id="page-perfiles">
+      <div class="card">
+        <div class="card-title">🌟 Personalidad y Gustos</div>
+        <div class="grid-2">
+          <div class="person-col p1"><label>Mis Likes</label><textarea id="p1-likes"></textarea></div>
+          <div class="person-col p2"><label>Mis Likes</label><textarea id="p2-likes"></textarea></div>
+        </div>
+      </div>
     </div>
 
-    <div class="section">
-      <h2>Nuestras Palabras</h2>
-      <label>Frecuencia de expresiones (Números)</label>
-      <input type="text" id="pie_vals" placeholder="6 números ej: 10,5,8,12,4,7" oninput="updatePie()">
-      <div class="chart-container"><canvas id="pie-chart"></canvas></div>
+    <div class="page" id="page-mision">
+        <div class="card">
+            <div class="card-title">🎯 Nuestra Misión</div>
+            <textarea id="mision-texto" rows="5" placeholder="¿Por qué estamos juntos?"></textarea>
+        </div>
     </div>
-  </div>
 
-  <div class="section">
-    <h2>Acuerdos de Convivencia</h2>
-    <label>¿Cómo manejamos los días difíciles?</label>
-    <textarea id="acuerdo_dias" rows="4"></textarea>
-    <label>Nuestros límites innegociables</label>
-    <textarea id="acuerdo_limites" rows="4"></textarea>
-  </div>
+    <div class="page" id="page-conflictos">
+        <div class="card">
+            <div class="card-title">🚫 Palabras Prohibidas</div>
+            <input type="text" id="forbidden-1" placeholder="Ej: 'Siempre haces lo mismo'">
+            <input type="text" id="forbidden-2" placeholder="Ej: 'Entonces terminemos'">
+        </div>
+    </div>
 
-  <button class="btn-save" onclick="saveAll()">✨ Guardar Manual para Ambos</button>
-  <div id="status-msg"></div>
+    <div class="page" id="page-amor">
+        <div class="card">
+            <div class="card-title">💝 Nuestros Lenguajes</div>
+            <div class="grid-2">
+                <div class="person-col p1"><label>Mi lenguaje principal</label><input type="text" id="p1-lang"></div>
+                <div class="person-col p2"><label>Mi lenguaje principal</label><input type="text" id="p2-lang"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page" id="page-convivencia">
+        <div class="card">
+            <div class="card-title">🏡 Acuerdos del Hogar</div>
+            <table>
+                <tr><th>Tema</th><th>Acuerdo</th></tr>
+                <tr><td>Limpieza</td><td><input type="text" id="conv-limpieza"></td></tr>
+                <tr><td>Finanzas</td><td><input type="text" id="conv-finanzas"></td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="page" id="page-limites">
+        <div class="card">
+            <div class="card-title">🚩 Límites No Negociables</div>
+            <textarea id="limites-texto" rows="6"></textarea>
+        </div>
+    </div>
+
+  </main>
 </div>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrsWiGpq9iExHHFDsvwDM-x6hk9KysydIF7WBa8fdaajW0-jja1CbBQ3AAlAoseN2_/exec";
 
-// --- LÓGICA DE GRÁFICAS ---
-let radarInst, lineInst, pieInst;
-
-function updateRadar() {
-  const ctx = document.getElementById('radar-chart');
-  const d1 = document.getElementById('radar_p1').value.split(',').map(Number);
-  const d2 = document.getElementById('radar_p2').value.split(',').map(Number);
-  if(radarInst) radarInst.destroy();
-  radarInst = new Chart(ctx, {
-    type: 'radar',
-    data: {
-      labels: ['Palabras', 'Tiempo', 'Regalos', 'Actos', 'Contacto'],
-      datasets: [
-        {label: 'P1', data: d1, borderColor: '#C9715A', backgroundColor: 'rgba(201,113,90,0.2)'},
-        {label: 'P2', data: d2, borderColor: '#5C3D6E', backgroundColor: 'rgba(92,61,110,0.2)'}
-      ]
-    },
-    options: { scales: { r: { min: 0, max: 10 } } }
-  });
+// Navegación entre páginas
+function nav(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
 }
 
-function updateLine() {
-  const ctx = document.getElementById('line-chart');
-  const d1 = document.getElementById('line_p1').value.split(',').map(Number);
-  const d2 = document.getElementById('line_p2').value.split(',').map(Number);
-  if(lineInst) lineInst.destroy();
-  lineInst = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'],
-      datasets: [
-        {label: 'P1', data: d1, borderColor: '#C9715A', tension: 0.4},
-        {label: 'P2
+// GUARDAR EN GOOGLE SHEETS
+async function saveAll() {
+  const status = document.getElementById('save-status');
+  status.innerText = "Guardando en la nube... ☁️";
+  
+  const data = {};
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    if (el.id) data[el.id] = el.value;
+  });
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify(data)
+    });
+    status.innerText = "✅ ¡Sincronizado para ambos!";
+    setTimeout(() => status.innerText = "Sincronizado con la nube", 5000);
+  } catch (e) {
+    status.innerText = "❌ Error al conectar";
+  }
+}
+
+// CARGAR DESDE GOOGLE SHEETS
+async function loadAll() {
+  const status = document.getElementById('save-status');
+  status.innerText = "Sincronizando... ✨";
+  try {
+    const response = await fetch(SCRIPT_URL);
+    const data = await response.json();
+    if (data) {
+      Object.keys(data).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = data[id];
+      });
+    }
+    status.innerText = "Sincronizado con la nube";
+  } catch (e) {
+    status.innerText = "Listo para empezar";
+  }
+}
+
+window.onload = loadAll;
+</script>
+
+</body>
+</html>
